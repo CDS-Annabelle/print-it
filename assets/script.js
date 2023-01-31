@@ -21,53 +21,85 @@ const slides = [
 
 // Récupération des balises
 const prev = document.getElementById("prev");
-prev.style.background = "rgba(0,0,0,0.6)";
-
 const next = document.getElementById("next");
-next.style.background = "rgba(0,0,0,0.6)";
-
 const imageElement = document.getElementById("ban-img");
 const textElement = document.getElementById("text");
+const dots = document.querySelector(".dots");
+const totalSlides = slides.length;
+let currentSlide = 0;
 
-const dots = document.getElementsByClassName("dot");
-
-const imgSlide = slides.length;
-// renvoie le tableau de slides
-console.log(slides);
-
-let i = 0;
+prev.style.background = "rgba(0,0,0,0.6)";
+next.style.background = "rgba(0,0,0,0.6)";
 
 
-/* arrow next 
- J'incrémente tant que i est inférieur à mon nombre de slide */
+addListenersToArrows();
+generateDots(dots, slides.length);
+addListenersToDots();
+updateSlides();
+
+function addListenersToArrows(){
+/* arrow next */
 next.addEventListener("click", function () {
-    if(i < imgSlide - 1){
-        i++;
+    if(currentSlide < totalSlides - 1){
+        currentSlide++;
     } else {
-        i = 0;
+        currentSlide = 0;
     }
     console.log("tu cliques sur suivant");
-
-    imageElement.src = `./assets/images/slideshow/${slides[i].image}`;
-    textElement.innerHTML = slides[i].tagLine;
-
-    dots[i].classList.add("selected-dot");
-    dots[i].checked = true;
+    updateSlides();
 });
+
+next.onmouseover = function(){this.style.backgroundColor ='orange'};
+next.onmouseout = function(){this.style.backgroundColor='rgba(0,0,0,0.6)'};
+
 
 /* arrow prev */
 prev.addEventListener("click", function () {
-    if (i == 0) {
-        i = imgSlide - 1;
+    if (currentSlide == 0) {
+        currentSlide = totalSlides - 1;
     }
     else {
-        i--;
+        currentSlide--;
     }
-    alert("tu cliques sur précédent");
-
-    imageElement.src = `./assets/images/slideshow/${slides[i].image}`;
-    textElement.innerHTML = slides[i].tagLine;
-
-    dots[i].classList.add("selected-dot");
-    dots[i].checked = true;
+    console.log("tu cliques sur précédent");
+    updateSlides();
 });
+}
+prev.onclick = function(){alert('Flèche gauche cliquée')};
+prev.onmouseover = function(){this.style.backgroundColor ='orange'};
+prev.onmouseout = function(){this.style.backgroundColor='rgba(0,0,0,0.6)'};
+
+
+function updateSlides(){
+    imageElement.src =`./assets/images/slideshow/${slides[currentSlide].image}`;
+    textElement.innerHTML = slides[currentSlide].tagLine;
+    const dotArray = Array.from(document.querySelectorAll('.dot'));
+    document.querySelector(".dot_selected")?.classList.remove("dot_selected");
+    dotArray[currentSlide].classList.add("dot_selected");
+    dotArray[currentSlide].checked = true;
+}
+
+function generateDots(container, numberSlides){
+    for(let index = 0; index < numberSlides ; index++){
+        container.innerHTML += `<div class="dot"></div>`
+    }
+}
+
+function addListenersToDots(){
+    const dotArray = Array.from(document.querySelectorAll('.dot'));
+    dotArray.forEach((dot, index) => {
+        dot.addEventListener('click', (e)=>{
+            currentSlide = index
+            updateSlides();
+        })
+    })
+}
+
+setInterval(()=>{
+    currentSlide = currentSlide < totalSlides -1? currentSlide +1 : 0
+    updateSlides()
+}, 4000)
+
+
+
+
