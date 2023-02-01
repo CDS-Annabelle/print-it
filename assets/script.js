@@ -18,7 +18,6 @@ const slides = [
 ]
 
 
-
 // Récupération des balises
 const prev = document.getElementById("prev");
 const next = document.getElementById("next");
@@ -64,11 +63,12 @@ prev.addEventListener("click", function () {
     console.log("tu cliques sur précédent");
     updateSlides();
 });
-}
-prev.onclick = function(){alert('Flèche gauche cliquée')};
+
+
 prev.onmouseover = function(){this.style.backgroundColor ='orange'};
 prev.onmouseout = function(){this.style.backgroundColor='rgba(0,0,0,0.6)'};
 
+}
 
 function updateSlides(){
     imageElement.src =`./assets/images/slideshow/${slides[currentSlide].image}`;
